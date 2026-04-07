@@ -1,0 +1,8 @@
+# 服务器配置
+server:
+  port: 8080
+
+# Spring 配置
+spring:
+  application:
+    name: ruoyi-ddd

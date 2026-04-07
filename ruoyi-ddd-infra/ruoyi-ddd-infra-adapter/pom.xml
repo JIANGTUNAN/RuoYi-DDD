@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ruoyi.ddd</groupId>
+        <artifactId>ruoyi-ddd-infra</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <name>ruoyi-ddd-infra-adapter</name>
+    <artifactId>ruoyi-ddd-infra-adapter</artifactId>
+    <description>框架适配器模块：线程池、日志、Spring扩展等零散配置</description>
+
+    <dependencies>
+        <!-- DDD Domain: 领域层 -->
+        <dependency>
+            <groupId>com.ruoyi.ddd</groupId>
+            <artifactId>ruoyi-ddd-domain</artifactId>
+        </dependency>
+
+        <!-- Spring Context: Spring上下文支持 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- Lombok: 简化Java代码注解工具 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

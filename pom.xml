@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ruoyi.ddd</groupId>
+    <artifactId>ruoyi-ddd</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>RuoYi-DDD</name>
+    <description>基于DDD架构的若依框架重构</description>
+
+    <modules>
+        <module>ruoyi-ddd-api</module>
+        <module>ruoyi-ddd-app</module>
+        <module>ruoyi-ddd-domain</module>
+        <module>ruoyi-ddd-infra</module>
+        <module>ruoyi-ddd-start</module>
+    </modules>
+
+    <properties>
+        <ruoyi-ddd.version>1.0.0</ruoyi-ddd.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- Spring Boot 2.7.x -->
+        <spring-boot.version>2.7.18</spring-boot.version>
+
+        <!-- 第三方依赖版本 -->
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <hutool.version>5.8.25</hutool.version>
+        <lombok.version>1.18.30</lombok.version>
+        <sa-token.version>1.37.0</sa-token.version>
+        <transmittable-thread-local.version>2.14.4</transmittable-thread-local.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <fastjson.version>2.0.43</fastjson.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 内部模块 -->
+            <!-- ddd-api: 接口层（Controller、DTO、请求响应对象） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-api</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-app: 应用层（应用服务、DTO转换、业务编排） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-app</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-domain: 领域层（实体、值对象、领域服务、仓储接口） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-domain</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-infra: 基础设施层父模块 -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-infra</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-infra-adapter: 框架适配器模块（线程池、日志、Spring扩展等零散配置） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-infra-adapter</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-infra-db: 数据库持久化模块（MyBatis配置、Mapper、仓储实现） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-infra-db</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- ddd-start: 启动模块（Spring Boot入口、配置整合） -->
+            <dependency>
+                <groupId>com.ruoyi.ddd</groupId>
+                <artifactId>ruoyi-ddd-start</artifactId>
+                <version>${ruoyi-ddd.version}</version>
+            </dependency>
+
+            <!-- 第三方依赖 -->
+            <!-- MyBatis Plus: MyBatis增强工具（分页、代码生成、性能分析） -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- MyBatis Plus Annotation: 注解包（供domain层使用） -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-annotation</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- MySQL Connector: MySQL数据库驱动 -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+
+            <!-- Hutool: Java工具类库（日期、字符串、加密、HTTP等） -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- Sa-Token: Java权限认证框架（登录认证、权限校验、Session管理） -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <!-- MapStruct: 对象映射框架（编译时生成转换代码） -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <parameters>true</parameters>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+                                <version>${lombok-mapstruct-binding.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

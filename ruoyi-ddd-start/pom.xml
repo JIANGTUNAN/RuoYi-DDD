@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ruoyi.ddd</groupId>
+        <artifactId>ruoyi-ddd</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <name>ruoyi-ddd-start</name>
+    <artifactId>ruoyi-ddd-start</artifactId>
+    <description>DDD 应用启动入口，整合所有层</description>
+
+    <dependencies>
+        <!-- DDD API: 门面层 -->
+        <dependency>
+            <groupId>com.ruoyi.ddd</groupId>
+            <artifactId>ruoyi-ddd-api</artifactId>
+        </dependency>
+
+        <!-- DDD Infra Adapter: 框架适配器配置（线程池、日志等） -->
+        <dependency>
+            <groupId>com.ruoyi.ddd</groupId>
+            <artifactId>ruoyi-ddd-infra-adapter</artifactId>
+        </dependency>
+
+        <!-- DDD Infra DB: 数据库持久化、MyBatis配置 -->
+        <dependency>
+            <groupId>com.ruoyi.ddd</groupId>
+            <artifactId>ruoyi-ddd-infra-db</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Web: Web应用支持 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Lombok: 简化Java代码注解工具 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
