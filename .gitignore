@@ -29,3 +29,6 @@ docs/
 log/
 .claude/
 CLAUDE.md
+
+# 本地环境敏感配置
+application-local.yml

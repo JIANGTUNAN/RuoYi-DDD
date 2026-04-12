@@ -28,7 +28,7 @@ public class PasswordService {
      * @return 解密后的原始密码
      */
     public String decryptPassword(String encryptedPassword) {
-        RSA rsa = new RSA(Base64.decode(rsaProperties.getPrivateKey()), null);
+        RSA rsa = new RSA(Base64.decode(rsaProperties.getPrivateKey()), Base64.decode(rsaProperties.getPublicKey()));
         return rsa.decryptStr(encryptedPassword, KeyType.PrivateKey);
     }
 

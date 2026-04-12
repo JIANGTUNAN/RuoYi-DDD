@@ -5,16 +5,19 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.ruoyi.ddd.api.common.config.SecurityProperties;
-import com.ruoyi.ddd.api.common.constant.MockTokenConstant;
-import com.ruoyi.ddd.app.common.context.ContextHolder;
-import com.ruoyi.ddd.app.common.context.HttpContext;
-import com.ruoyi.ddd.app.common.context.SecurityContext;
+import com.ruoyi.ddd.api.common.constant.AuthConstant;
+import com.ruoyi.ddd.domain.common.context.ContextHolder;
+import com.ruoyi.ddd.domain.common.context.HttpContext;
+import com.ruoyi.ddd.domain.common.context.SecurityContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 
 /**
  * 统一用户上下文拦截器
@@ -85,40 +88,46 @@ public class UserContextInterceptor extends SaInterceptor {
         }
 
         String tokenValue = StpUtil.getTokenValue();
-        if (tokenValue == null || !tokenValue.startsWith(MockTokenConstant.MOCK_PREFIX)) {
+        if (tokenValue == null || !tokenValue.startsWith(AuthConstant.MOCK_TOKEN_PREFIX)) {
             return;
         }
 
-        String userIdStr = tokenValue.substring(MockTokenConstant.MOCK_PREFIX.length());
+        String userIdStr = tokenValue.substring(AuthConstant.MOCK_TOKEN_PREFIX.length());
         if (BooleanUtil.isFalse(NumberUtil.isInteger(userIdStr))) {
             log.warn("【Mock 登录】无效的 Mock Token: {}", tokenValue);
             return;
         }
 
-        long userId = Long.parseLong(userIdStr);
-        StpUtil.login(userId);
-        StpUtil.getSession().set("username", "mock-user-" + userId);
-        StpUtil.getSession().set("nickname", "Mock用户" + userId);
+        StpUtil.login(userIdStr);
+        StpUtil.getSession().set(AuthConstant.SESSION_KEY_USERNAME, AuthConstant.MOCK_USERNAME_PREFIX + userIdStr);
+        StpUtil.getSession().set(AuthConstant.SESSION_KEY_NICKNAME, AuthConstant.MOCK_NICKNAME_PREFIX + userIdStr);
 
-        log.warn("【Mock 登录】userId: {}", userId);
+        log.warn("【Mock 登录】userId: {}", userIdStr);
     }
 
     /**
      * 初始化上下文
-     * 创建 HttpContext 快照，已登录时初始化安全上下文
+     * 创建 HttpContext，已登录时初始化安全上下文
      */
     private void initializeContext(HttpServletRequest request) {
         try {
-            // 1. 初始化 HTTP 上下文（每个请求都有）
-            String token = StpUtil.isLogin() ? StpUtil.getTokenValue() : null;
-            ContextHolder.setHttpContext(HttpContext.snapshot(request, token));
+            // 1. 构建 HTTP 上下文（每个请求都有）
+            HttpContext httpContext = new HttpContext(
+                    request.getRequestURI(),
+                    request.getMethod(),
+                    JakartaServletUtil.getClientIP(request),
+                    StpUtil.isLogin() ? StpUtil.getTokenValue() : StrUtil.EMPTY,
+                    Collections.unmodifiableMap(JakartaServletUtil.getHeaderMap(request)),
+                    Collections.unmodifiableMap(JakartaServletUtil.getParamMap(request))
+            );
+            ContextHolder.setHttpContext(httpContext);
 
             // 2. 如果已登录，初始化安全上下文
             if (StpUtil.isLogin()) {
                 SecurityContext securityContext = new SecurityContext(
                         StpUtil.getLoginIdAsInt(),
-                        StpUtil.getSession().getString("username"),
-                        StpUtil.getSession().getString("nickname")
+                        StpUtil.getSession().getString(AuthConstant.SESSION_KEY_USERNAME),
+                        StpUtil.getSession().getString(AuthConstant.SESSION_KEY_NICKNAME)
                 );
                 ContextHolder.setContext(securityContext);
             }

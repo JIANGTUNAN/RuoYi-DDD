@@ -36,7 +36,7 @@
         <!-- Sa-Token: Java权限认证框架 -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
         </dependency>
 
         <!-- Jackson: JSON 序列化 -->

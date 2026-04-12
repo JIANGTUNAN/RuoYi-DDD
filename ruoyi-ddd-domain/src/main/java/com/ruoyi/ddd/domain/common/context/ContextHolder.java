@@ -1,13 +1,11 @@
-package com.ruoyi.ddd.app.common.context;
+package com.ruoyi.ddd.domain.common.context;
 
 import cn.hutool.core.util.ObjUtil;
-import com.alibaba.ttl.TransmittableThreadLocal;
 import lombok.experimental.UtilityClass;
 
 /**
  * 上下文持有者
- * 提供全局访问入口，基于 TTL（TransmittableThreadLocal）存储用户上下文和 HTTP 请求上下文，
- * 自动传递到子线程和线程池。
+ * 提供全局访问入口，基于 ThreadLocal 存储用户上下文和 HTTP 请求上下文。
  *
  * @author tooolan
  * @since 2026年4月9日
@@ -16,14 +14,14 @@ import lombok.experimental.UtilityClass;
 public class ContextHolder {
 
     /**
-     * 用户上下文 TTL 存储，自动传递到子线程
+     * 用户上下文存储
      */
-    private final TransmittableThreadLocal<SecurityContext> USER_CONTEXT_HOLDER = new TransmittableThreadLocal<>();
+    private final ThreadLocal<SecurityContext> USER_CONTEXT_HOLDER = new ThreadLocal<>();
 
     /**
-     * HTTP 请求上下文 TTL 存储，自动传递到子线程
+     * HTTP 请求上下文存储
      */
-    private final TransmittableThreadLocal<HttpContext> HTTP_CONTEXT_HOLDER = new TransmittableThreadLocal<>();
+    private final ThreadLocal<HttpContext> HTTP_CONTEXT_HOLDER = new ThreadLocal<>();
 
     // ==================== 用户上下文相关方法 ====================
 
@@ -35,10 +33,10 @@ public class ContextHolder {
      */
     public Integer getUserId() {
         SecurityContext context = getUserContextInternal();
-        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.getUserId())) {
+        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.userId())) {
             throw new IllegalStateException("当前用户未登录");
         }
-        return context.getUserId();
+        return context.userId();
     }
 
     /**
@@ -49,10 +47,10 @@ public class ContextHolder {
      */
     public String getUsername() {
         SecurityContext context = getUserContextInternal();
-        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.getUsername())) {
+        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.username())) {
             throw new IllegalStateException("当前用户未登录");
         }
-        return context.getUsername();
+        return context.username();
     }
 
     /**
@@ -63,10 +61,10 @@ public class ContextHolder {
      */
     public String getNickname() {
         SecurityContext context = getUserContextInternal();
-        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.getNickname())) {
+        if (ObjUtil.isNull(context) || ObjUtil.isNull(context.nickname())) {
             throw new IllegalStateException("当前用户未登录");
         }
-        return context.getNickname();
+        return context.nickname();
     }
 
     /**
@@ -138,7 +136,7 @@ public class ContextHolder {
      */
     public String getToken() {
         HttpContext httpContext = HTTP_CONTEXT_HOLDER.get();
-        return ObjUtil.isNotNull(httpContext) ? httpContext.getToken() : null;
+        return ObjUtil.isNotNull(httpContext) ? httpContext.token() : null;
     }
 
     /**
@@ -148,7 +146,7 @@ public class ContextHolder {
      */
     public String getClientIp() {
         HttpContext httpContext = HTTP_CONTEXT_HOLDER.get();
-        return ObjUtil.isNotNull(httpContext) ? httpContext.getClientIp() : null;
+        return ObjUtil.isNotNull(httpContext) ? httpContext.clientIp() : null;
     }
 
     // ==================== 通用方法 ====================
