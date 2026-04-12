@@ -146,6 +146,13 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
+
+            <!-- TransmittableThreadLocal: 解决线程池场景下 ThreadLocal 上下文传递问题 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

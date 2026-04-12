@@ -6,3 +6,38 @@ server:
 spring:
   application:
     name: ruoyi-ddd
+
+# RuoYi 安全配置
+ruoyi:
+  security:
+    # Mock 身份功能（仅开发环境开启，生产环境必须关闭）
+    # 开启后 token 传入 test-{userId} 格式可自动以该用户身份登录
+    mock-enabled: false
+    # 公开路径白名单（不需要登录校验）
+    public-paths:
+      - /error
+      - /favicon.ico
+    # RSA 密钥配置（纯 Base64，无 PEM 头尾）
+    rsa:
+      private-key: ''
+      public-key: ''
+    # 允许跨域的前端地址
+    cors-origins:
+      - http://localhost:8080
+
+# Sa-Token 配置
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: Authorization
+  # token 有效期（单位：秒），默认 30 天
+  timeout: 2592000
+  # token 临时有效期（指定时间内无操作则过期），默认 30 分钟
+  active-timeout: 1800
+  # 是否允许同一账号多地同时登录
+  is-concurrent: true
+  # 多人登录同一账号时，是否共用一个 token
+  is-share: false
+  # token 风格（uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: false
