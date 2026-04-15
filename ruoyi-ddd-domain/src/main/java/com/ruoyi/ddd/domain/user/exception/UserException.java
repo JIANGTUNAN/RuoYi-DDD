@@ -1,7 +1,7 @@
 package com.ruoyi.ddd.domain.user.exception;
 
-import com.ruoyi.ddd.domain.user.constant.UserErrorCode;
-import lombok.Getter;
+import com.ruoyi.ddd.domain.common.exception.BaseException;
+import com.ruoyi.ddd.domain.common.exception.ErrorCode;
 
 /**
  * 用户领域异常
@@ -10,22 +10,25 @@ import lombok.Getter;
  * @author tooolan
  * @since 2026年4月12日
  */
-@Getter
-public class UserException extends RuntimeException {
-
-    /**
-     * 错误码
-     */
-    private final String code;
+public class UserException extends BaseException {
 
     /**
      * 基于错误码构造用户异常
      *
-     * @param errorCode 用户错误码枚举
+     * @param errorCode 错误码枚举
      */
-    public UserException(UserErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.code = errorCode.getCode();
+    public UserException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    /**
+     * 基于错误码和原因异常构造用户异常
+     *
+     * @param errorCode 错误码枚举
+     * @param cause     原始异常
+     */
+    public UserException(ErrorCode errorCode, Throwable cause) {
+        super(errorCode, cause);
     }
 
 }

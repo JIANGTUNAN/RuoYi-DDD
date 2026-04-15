@@ -1,11 +1,13 @@
 package com.ruoyi.ddd.domain.user.entity;
 
 import cn.hutool.core.util.StrUtil;
+import com.ruoyi.ddd.domain.common.constant.MiscConstants;
 import com.ruoyi.ddd.domain.user.constant.UserErrorCode;
+import com.ruoyi.ddd.domain.user.constant.UserSex;
+import com.ruoyi.ddd.domain.user.constant.UserStatus;
+import com.ruoyi.ddd.domain.user.constant.UserType;
 import com.ruoyi.ddd.domain.user.exception.UserException;
 import lombok.Getter;
-
-import java.util.regex.Pattern;
 
 /**
  * 用户 聚合根实体
@@ -19,22 +21,12 @@ import java.util.regex.Pattern;
 public class User {
 
     /**
-     * 昵称特殊字符校验正则：仅允许中文、英文、数字、下划线
-     */
-    private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[\\u4e00-\\u9fa5a-zA-Z0-9_]+$");
-
-    /**
-     * 超级管理员用户ID
-     */
-    private static final Long ADMIN_USER_ID = 1L;
-
-    /**
      * 用户ID
      */
     private Long id;
 
     /**
-     * 部门ID（跨聚合引用，仅持有ID）
+     * 部门ID
      */
     private Long deptId;
 
@@ -49,9 +41,9 @@ public class User {
     private String nickName;
 
     /**
-     * 用户类型（00系统用户）
+     * 用户类型
      */
-    private String userType;
+    private UserType userType;
 
     /**
      * 用户邮箱
@@ -64,9 +56,9 @@ public class User {
     private String phonenumber;
 
     /**
-     * 用户性别（0男 1女 2未知）
+     * 用户性别
      */
-    private String sex;
+    private UserSex sex;
 
     /**
      * 头像地址
@@ -79,9 +71,9 @@ public class User {
     private String password;
 
     /**
-     * 账号状态（0正常 1停用）
+     * 账号状态
      */
-    private String status;
+    private UserStatus status;
 
     /**
      * 备注
@@ -117,8 +109,8 @@ public class User {
      * 注册完成后调用，设置默认状态为正常
      */
     public void init() {
-        this.status = "0";
-        this.userType = "00";
+        this.status = UserStatus.NORMAL;
+        this.userType = UserType.SYSTEM;
     }
 
     /**
@@ -143,10 +135,10 @@ public class User {
         if (isAdmin()) {
             throw new UserException(UserErrorCode.CANNOT_DISABLE_ADMIN);
         }
-        if ("1".equals(this.status)) {
+        if (UserStatus.DISABLED.equals(this.status)) {
             throw new UserException(UserErrorCode.ALREADY_DISABLED);
         }
-        this.status = "1";
+        this.status = UserStatus.DISABLED;
     }
 
     /**
@@ -182,7 +174,7 @@ public class User {
         if (StrUtil.isBlank(nickName)) {
             throw new UserException(UserErrorCode.NICKNAME_EMPTY);
         }
-        if (!NICKNAME_PATTERN.matcher(nickName).matches()) {
+        if (!MiscConstants.NICKNAME_PATTERN.matcher(nickName).matches()) {
             throw new UserException(UserErrorCode.NICKNAME_INVALID);
         }
     }
@@ -193,7 +185,7 @@ public class User {
      * 判断是否为超级管理员
      */
     private boolean isAdmin() {
-        return ADMIN_USER_ID.equals(this.id);
+        return MiscConstants.ADMIN_USER_ID.equals(this.id);
     }
 
 }
